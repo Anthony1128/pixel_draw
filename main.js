@@ -8,22 +8,23 @@ var window_height = window.innerHeight;
 
 var canvas_width = window_width * 0.8;
 var canvas_height = window_height * 0.8
-var canvas_step = window_width * 0.04;
+var canvas_width_step = window_width * 0.04;
+var canvas_height_step = window_height * 0.04;
 
 canvas.width = canvas_width;
 canvas.height = canvas_height;
 
-for (var x = 1; x < canvas_width; x += canvas_step) {
+for (var x = 1; x < canvas_width; x += canvas_width_step) {
   context.moveTo(x, 0);
   context.lineTo(x, canvas_height);
 }
 
-for (var y = 1; y < canvas_height; y += canvas_step) {
+for (var y = 1; y < canvas_height; y += canvas_height_step) {
   context.moveTo(0, y);
   context.lineTo(canvas_width, y);
 }
 
-context.strokeStyle = "#000";
+context.strokeStyle = "Black";
 context.stroke();
 
 canvas.addEventListener("click", change_color, false);
@@ -31,12 +32,15 @@ canvas.addEventListener("click", change_color, false);
 function Cell(row, column) {
     this.row = row;
     this.column = column;
-    this.color;
 }
 
 function change_color(pos) {
     var cell = getCursorPosition(pos);
-    console.log(color_selector_obj);
+    var color = color_selector_obj.value;
+    context.beginPath();  
+    context.rect(cell.column * canvas_width_step, cell.row * canvas_height_step, canvas_width_step, canvas_height_step);
+    context.fillStyle = color;
+    context.fill();
 };
 
 function getCursorPosition(pos) {
@@ -54,7 +58,9 @@ function getCursorPosition(pos) {
 
     x -= canvas.offsetLeft;
     y -= canvas.offsetTop;
-    var cell = new Cell(Math.floor(y/(window_height * 0.04)), Math.floor(x/(window_width * 0.04)));
+    var cell = new Cell(Math.floor(y/canvas_height_step), Math.floor(x/canvas_width_step));
+    console.log(x);
+    console.log(y);
     return cell;
 };
 
